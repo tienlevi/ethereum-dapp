@@ -2,6 +2,8 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import type { NextPage } from "next";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
+import Input from "../components/Input";
+import Button from "../components/Button";
 
 const Home: NextPage = () => {
   return (
@@ -17,6 +19,15 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         <ConnectButton />
+        <div
+          style={{ display: "flex", flexDirection: "column" }}
+          className={styles.card}
+        >
+          <h1 style={{ textAlign: "center" }}>Send Transation</h1>
+          <Input placeholder="Address" style={{ margin: "10px 0px" }} />
+          <Input placeholder="Amount" style={{ margin: "10px 0px" }} />
+          <Button style={{ margin: "10px 0px" }}>Send</Button>
+        </div>
       </main>
     </div>
   );
