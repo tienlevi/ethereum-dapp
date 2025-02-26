@@ -1,11 +1,19 @@
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import type { NextPage } from "next";
 import Head from "next/head";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useAccount, useBalance } from "wagmi";
+import type { NextPage } from "next";
 import styles from "../styles/Home.module.css";
 import Input from "../components/Input";
 import Button from "../components/Button";
+import { usdtToken } from "../constants/token";
 
 const Home: NextPage = () => {
+  const { address } = useAccount();
+  const { data: balance, isLoading } = useBalance({
+    address: address,
+    token: usdtToken,
+  });
+
   return (
     <div className={styles.container}>
       <Head>
@@ -19,6 +27,16 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         <ConnectButton />
+        <div>
+          <span>Your balance: </span>
+          {isLoading ? (
+            <span>Loading...</span>
+          ) : (
+            <span>
+              {balance?.formatted} {balance?.symbol}
+            </span>
+          )}
+        </div>
         <div
           style={{ display: "flex", flexDirection: "column" }}
           className={styles.card}
