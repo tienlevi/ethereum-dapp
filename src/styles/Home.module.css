@@ -11,19 +11,3 @@
   align-items: center;
   row-gap: 10px;
 }
-
-.card {
-  width: 300px;
-  padding: 8px 16px;
-  margin-top: 10px;
-  box-shadow: 0 0px 2px 1px rgba(102, 102, 102, 0.4);
-  border-radius: 10px;
-}
-
-.error {
-  color: rgb(218, 34, 34);
-}
-
-.success {
-  color: rgb(32, 206, 32);
-}

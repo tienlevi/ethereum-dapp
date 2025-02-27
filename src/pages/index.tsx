@@ -1,39 +1,17 @@
+"use client";
 import Head from "next/head";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useAccount, useBalance, useWriteContract } from "wagmi";
-import { erc20Abi, parseEther } from "viem";
-import { useForm } from "react-hook-form";
-import type { NextPage } from "next";
+import { useAccount, useBalance } from "wagmi";
 import styles from "../styles/Home.module.css";
-import Input from "../components/Input";
-import Button from "../components/Button";
 import { usdtToken } from "../constants/token";
-import { Inputs } from "../interface/input";
+import WriteContract from "../components/WriteContract";
 
-const Home: NextPage = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<Inputs>();
+const Home = () => {
   const { address } = useAccount();
   const { data: balance, isLoading } = useBalance({
     address: address,
     token: usdtToken,
   });
-  const { writeContractAsync, status, isPending } = useWriteContract();
-
-  const handleWriteContract = async (data: Inputs) => {
-    const response = await writeContractAsync({
-      abi: erc20Abi,
-      address: usdtToken,
-      functionName: "transfer",
-      args: [data.address, parseEther(data.amount.toString())],
-    });
-    console.log(response);
-
-    return response;
-  };
 
   return (
     <div className={styles.container}>
@@ -58,35 +36,7 @@ const Home: NextPage = () => {
             </span>
           )}
         </div>
-        <div
-          style={{ display: "flex", flexDirection: "column" }}
-          className={styles.card}
-        >
-          <h1 style={{ textAlign: "center" }}>Write Contract</h1>
-          <Input
-            {...register("address", { required: "Pleace enter address" })}
-            placeholder="Address"
-            style={{ margin: "10px 0px" }}
-          />
-          {errors.address && (
-            <p className={styles.error}>{errors.address?.message}</p>
-          )}
-          <Input
-            {...register("amount", { required: "Pleace enter amount" })}
-            placeholder="Amount"
-            style={{ margin: "10px 0px" }}
-          />
-          {errors.amount && (
-            <p className={styles.error}>{errors.amount?.message}</p>
-          )}
-          <Button
-            style={{ margin: "10px 0px" }}
-            onClick={handleSubmit(handleWriteContract)}
-            disabled={isPending}
-          >
-            {isPending ? "Loading..." : "Send"}
-          </Button>
-        </div>
+        <WriteContract />
       </main>
     </div>
   );
