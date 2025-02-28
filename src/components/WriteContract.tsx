@@ -6,6 +6,8 @@ import { usdtToken } from "../constants/token";
 import styles from "./style.module.css";
 import Input from "./Input";
 import Button from "./Button";
+import Link from "next/link";
+import { sepoliaBaseScanUrl } from "../constants";
 
 function WriteContract() {
   const {
@@ -30,6 +32,9 @@ function WriteContract() {
       console.log(error);
     }
   };
+
+  console.log(writeContract.data);
+
   return (
     <div
       style={{ display: "flex", flexDirection: "column" }}
@@ -51,6 +56,18 @@ function WriteContract() {
       />
       {errors.amount && (
         <p className={styles.error}>{errors.amount?.message}</p>
+      )}
+      {writeContract.status === "success" && (
+        <div>
+          <span>Hash is: </span>
+          <Link
+            target="_blank"
+            style={{ wordBreak: "break-all", color: "blue" }}
+            href={`${sepoliaBaseScanUrl}/tx/${writeContract.data}`}
+          >
+            {writeContract.data}
+          </Link>
+        </div>
       )}
       <Button
         style={{ margin: "10px 0px" }}
