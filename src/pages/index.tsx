@@ -25,6 +25,7 @@ const Home = () => {
       </Head>
 
       <main className={styles.main}>
+        <h1 style={{ textAlign: "center" }}>Wallet Management</h1>
         <ConnectButton />
         <div>
           <span>Your balance: </span>

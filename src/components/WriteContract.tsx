@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { Inputs } from "../interface/input";
 import { erc20Abi, parseEther } from "viem";
 import { usdtToken } from "../constants/token";
-import styles from "./style.module.css";
 import Input from "./Input";
 import Button from "./Button";
 import Link from "next/link";
@@ -36,27 +35,20 @@ function WriteContract() {
   console.log(writeContract.data);
 
   return (
-    <div
-      style={{ display: "flex", flexDirection: "column" }}
-      className={styles.card}
-    >
-      <h1 style={{ textAlign: "center" }}>Write Contract</h1>
+    <div style={{ display: "flex", flexDirection: "column" }} className={``}>
+      <h1 style={{ textAlign: "center" }}>Wallet Management</h1>
       <Input
         {...register("address", { required: "Pleace enter address" })}
         placeholder="Address"
         style={{ margin: "10px 0px" }}
       />
-      {errors.address && (
-        <p className={styles.error}>{errors.address?.message}</p>
-      )}
+      {errors.address && <p className={``}>{errors.address?.message}</p>}
       <Input
         {...register("amount", { required: "Pleace enter amount" })}
         placeholder="Amount"
         style={{ margin: "10px 0px" }}
       />
-      {errors.amount && (
-        <p className={styles.error}>{errors.amount?.message}</p>
-      )}
+      {errors.amount && <p className={``}>{errors.amount?.message}</p>}
       {writeContract.status === "success" && (
         <div>
           <span>Hash is: </span>

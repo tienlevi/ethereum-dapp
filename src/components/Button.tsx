@@ -1,5 +1,4 @@
 import { ButtonHTMLAttributes, ReactNode } from "react";
-import styles from "./style.module.css";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
@@ -7,7 +6,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 function Button({ children, ...props }: Props) {
   return (
-    <button className={styles.button} {...props}>
+    <button className={``} {...props}>
       {children}
     </button>
   );
