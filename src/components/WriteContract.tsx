@@ -16,37 +16,68 @@ function WriteContract() {
   } = useForm<Inputs>();
   const writeContract = useWriteContract();
 
-  const handleWriteContract = async (data: Inputs) => {
-    try {
-      const response = await writeContract.writeContractAsync({
-        abi: erc20Abi,
-        address: usdtToken,
-        functionName: "transfer",
-        args: [data.address, parseEther(data.amount.toString())],
-      });
-      console.log(response);
-
-      return response;
-    } catch (error) {
-      console.log(error);
-    }
+  const handleWriteContract = async (address: string, amount: any) => {
+    const response = await writeContract.writeContractAsync({
+      abi: erc20Abi,
+      address: usdtToken as `0x${string}`,
+      functionName: "transfer",
+      args: [address as `0x${string}`, parseEther(amount.toString())],
+    });
+    console.log(response);
+    return response;
   };
 
   console.log(writeContract.data);
 
+  const sendBalance = async (data: Inputs) => {
+    const addresses = data.address
+      .split(",")
+      .map((key) => key.trim())
+      .filter((key) => key.length > 0);
+
+    console.log("Addresses:", addresses);
+
+    const hashes: string[] = [];
+    const createKeys = addresses.map((key) => ({
+      privateKey: key,
+      status: "Created Transaction",
+      hashes: "",
+    }));
+    // setResult(createKeys as []);
+
+    for (const address of addresses) {
+      try {
+        const hash = await handleWriteContract(address, data.amount);
+        hashes.push(hash!);
+        const resultKeys = addresses.map((key, index) => ({
+          privateKey: key,
+          status: index < hashes.length ? "Completed" : "Pending",
+          hashes: index < hashes.length ? hashes[index] : "",
+        }));
+        // setResult(resultKeys as []);
+      } catch (error) {
+        const resultKeys = addresses.map((key, index) => ({
+          privateKey: key,
+          status: index < hashes.length ? "Completed" : "Failed",
+          hashes: index < hashes.length ? hashes[index] : "",
+        }));
+        // setResult(resultKeys as []);
+      }
+    }
+  };
+
   return (
-    <div style={{ display: "flex", flexDirection: "column" }} className={``}>
-      <h1 style={{ textAlign: "center" }}>Wallet Management</h1>
+    <div className={`w-full flex flex-col bg-white p-3 rounded-2xl`}>
       <Input
         {...register("address", { required: "Pleace enter address" })}
         placeholder="Address"
-        style={{ margin: "10px 0px" }}
+        className="my-3"
       />
       {errors.address && <p className={``}>{errors.address?.message}</p>}
       <Input
         {...register("amount", { required: "Pleace enter amount" })}
         placeholder="Amount"
-        style={{ margin: "10px 0px" }}
+        className="my-3"
       />
       {errors.amount && <p className={``}>{errors.amount?.message}</p>}
       {writeContract.status === "success" && (
@@ -63,7 +94,7 @@ function WriteContract() {
       )}
       <Button
         style={{ margin: "10px 0px" }}
-        onClick={handleSubmit(handleWriteContract)}
+        onClick={handleSubmit(sendBalance)}
         disabled={writeContract.isPending}
       >
         {writeContract.isPending ? "Loading..." : "Send"}

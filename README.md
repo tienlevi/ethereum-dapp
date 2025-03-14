@@ -1,29 +1,6 @@
-This is a [RainbowKit](https://rainbowkit.com) + [wagmi](https://wagmi.sh) + [Next.js](https://nextjs.org/) project bootstrapped with [`create-rainbowkit`](/packages/create-rainbowkit).
+Yêu cầu:
 
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
-
-## Learn More
-
-To learn more about this stack, take a look at the following resources:
-
-- [RainbowKit Documentation](https://rainbowkit.com) - Learn how to customize your wallet connection flow.
-- [wagmi Documentation](https://wagmi.sh) - Learn how to interact with Ethereum.
-- [Next.js Documentation](https://nextjs.org/docs) - Learn how to build a Next.js application.
-
-You can check out [the RainbowKit GitHub repository](https://github.com/rainbow-me/rainbowkit) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out the [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Ứng dụng cần cung cấp cho người dùng khả năng kết nối ví tiền điện tử của họ, hiển thị trạng thái kết nối ví và địa chỉ ví với tùy chọn ngắt kết nối khi cần.
+Người dùng có thể thực hiện chuyển ETH bằng cách nhập địa chỉ người nhận và chỉ định số tiền cần chuyển, với việc xác thực đầy đủ trước khi thực hiện giao dịch.
+Hệ thống cần duy trì lịch sử giao dịch, hiển thị các giao dịch trước đó với các chi tiết như mã giao dịch (transaction hash), địa chỉ người gửi và người nhận, số tiền chuyển, trạng thái và dấu thời gian (timestamps).
+Giao diện cần cung cấp phản hồi rõ ràng trong suốt quá trình thao tác, triển khai trạng thái tải trong khi giao dịch đang được xử lý và xử lý lỗi một cách hợp lý. Thiết kế cần đáp ứng, hoạt động mượt mà trên cả thiết bị máy tính để bàn và di động.

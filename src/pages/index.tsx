@@ -2,7 +2,6 @@
 import Head from "next/head";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount, useBalance } from "wagmi";
-import styles from "../styles/Home.module.css";
 import { usdtToken } from "../constants/token";
 import WriteContract from "../components/WriteContract";
 
@@ -14,7 +13,7 @@ const Home = () => {
   });
 
   return (
-    <div className={styles.container}>
+    <div className={`px-5`}>
       <Head>
         <title>Ethereum DApp</title>
         <meta
@@ -24,11 +23,11 @@ const Home = () => {
         <link href="/favicon.ico" rel="icon" />
       </Head>
 
-      <main className={styles.main}>
-        <h1 style={{ textAlign: "center" }}>Wallet Management</h1>
+      <main className={`w-[500px] mx-auto min-h-screen flex flex-col justify-center items-center gap-5`}>
+        <h1 className="text-center text-4xl  font-bold">Wallet Management</h1>
         <ConnectButton />
-        <div>
-          <span>Your balance: </span>
+        <div className="flex justify-between bg-white w-full rounded-2xl p-5">
+          <span>Balance: </span>
           {isLoading ? (
             <span>Loading...</span>
           ) : (
