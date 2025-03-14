@@ -4,6 +4,8 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount, useBalance } from "wagmi";
 import { usdtToken } from "../constants/token";
 import WriteContract from "../components/WriteContract";
+import History from "../components/History";
+import useTransactionStore from "../hooks/useTransactionStore";
 
 const Home = () => {
   const { address } = useAccount();
@@ -11,6 +13,7 @@ const Home = () => {
     address: address,
     token: usdtToken,
   });
+  const { transactions } = useTransactionStore();
 
   return (
     <div className={`px-5`}>
@@ -23,7 +26,9 @@ const Home = () => {
         <link href="/favicon.ico" rel="icon" />
       </Head>
 
-      <main className={`w-[500px] mx-auto min-h-screen flex flex-col justify-center items-center gap-5`}>
+      <main
+        className={`w-[500px] mx-auto min-h-screen flex flex-col justify-center items-center gap-5`}
+      >
         <h1 className="text-center text-4xl  font-bold">Wallet Management</h1>
         <ConnectButton />
         <div className="flex justify-between bg-white w-full rounded-2xl p-5">
@@ -37,6 +42,7 @@ const Home = () => {
           )}
         </div>
         <WriteContract />
+        <History transactions={transactions} />
       </main>
     </div>
   );

@@ -2,11 +2,12 @@ import { useWriteContract } from "wagmi";
 import { useForm } from "react-hook-form";
 import { Inputs } from "../interface/input";
 import { erc20Abi, parseEther } from "viem";
+import { v4 as uuidv4 } from "uuid";
 import { usdtToken } from "../constants/token";
 import Input from "./Input";
 import Button from "./Button";
-import Link from "next/link";
-import { sepoliaBaseScanUrl } from "../constants";
+import useTransactionStore from "../hooks/useTransactionStore";
+import { toast } from "react-toastify";
 
 function WriteContract() {
   const {
@@ -15,6 +16,8 @@ function WriteContract() {
     formState: { errors },
   } = useForm<Inputs>();
   const writeContract = useWriteContract();
+  const { addTransaction, updateTransaction } = useTransactionStore();
+  const id = uuidv4();
 
   const handleWriteContract = async (address: string, amount: any) => {
     const response = await writeContract.writeContractAsync({
@@ -23,11 +26,8 @@ function WriteContract() {
       functionName: "transfer",
       args: [address as `0x${string}`, parseEther(amount.toString())],
     });
-    console.log(response);
     return response;
   };
-
-  console.log(writeContract.data);
 
   const sendBalance = async (data: Inputs) => {
     const addresses = data.address
@@ -35,33 +35,34 @@ function WriteContract() {
       .map((key) => key.trim())
       .filter((key) => key.length > 0);
 
-    console.log("Addresses:", addresses);
-
     const hashes: string[] = [];
-    const createKeys = addresses.map((key) => ({
-      privateKey: key,
-      status: "Created Transaction",
-      hashes: "",
-    }));
-    // setResult(createKeys as []);
 
+    addTransaction({
+      id: id,
+      address: data.address,
+      status: "pending",
+      hash: "",
+      amount: Number(data.amount),
+      date: new Date().toLocaleString(),
+    });
     for (const address of addresses) {
       try {
         const hash = await handleWriteContract(address, data.amount);
         hashes.push(hash!);
-        const resultKeys = addresses.map((key, index) => ({
-          privateKey: key,
-          status: index < hashes.length ? "Completed" : "Pending",
-          hashes: index < hashes.length ? hashes[index] : "",
-        }));
-        // setResult(resultKeys as []);
+        toast.success("Transaction created successfully");
+        updateTransaction(id, {
+          address: address,
+          status: "completed",
+          hash: hash,
+          date: new Date().toLocaleString(),
+        });
       } catch (error) {
-        const resultKeys = addresses.map((key, index) => ({
-          privateKey: key,
-          status: index < hashes.length ? "Completed" : "Failed",
-          hashes: index < hashes.length ? hashes[index] : "",
-        }));
-        // setResult(resultKeys as []);
+        updateTransaction(id, {
+          address: address,
+          status: "failed",
+          hash: "",
+          date: new Date().toLocaleString(),
+        });
       }
     }
   };
@@ -70,28 +71,21 @@ function WriteContract() {
     <div className={`w-full flex flex-col bg-white p-3 rounded-2xl`}>
       <Input
         {...register("address", { required: "Pleace enter address" })}
-        placeholder="Address"
+        label="Recipient Address"
         className="my-3"
       />
-      {errors.address && <p className={``}>{errors.address?.message}</p>}
+      {errors.address && (
+        <p className={`text-red-500`}>{errors.address?.message}</p>
+      )}
       <Input
         {...register("amount", { required: "Pleace enter amount" })}
-        placeholder="Amount"
+        label="Amount"
         className="my-3"
       />
-      {errors.amount && <p className={``}>{errors.amount?.message}</p>}
-      {writeContract.status === "success" && (
-        <div>
-          <span>Hash is: </span>
-          <Link
-            target="_blank"
-            style={{ wordBreak: "break-all", color: "blue" }}
-            href={`${sepoliaBaseScanUrl}/tx/${writeContract.data}`}
-          >
-            {writeContract.data}
-          </Link>
-        </div>
+      {errors.amount && (
+        <p className={`text-red-500`}>{errors.amount?.message}</p>
       )}
+
       <Button
         style={{ margin: "10px 0px" }}
         onClick={handleSubmit(sendBalance)}

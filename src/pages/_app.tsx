@@ -7,6 +7,7 @@ import { WagmiProvider } from "wagmi";
 import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
 
 import { wagmiConfig } from "../config/wagmi";
+import { ToastContainer } from "react-toastify";
 
 const client = new QueryClient();
 
@@ -15,6 +16,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={client}>
         <RainbowKitProvider>
+          <ToastContainer />
           <Component {...pageProps} />
         </RainbowKitProvider>
       </QueryClientProvider>
